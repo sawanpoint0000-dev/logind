@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+<title>AMUL APP</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#f8f9fb}
+
+#authPage{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+.login-container{width:92%;max-width:380px;background:#fff;border-radius:40px;padding:30px 25px;box-shadow:0 15px 35px rgba(0,0,0,.05);text-align:center}
+.logo-box{background:#e62e2d;width:115px;height:115px;border-radius:25px;margin:0 auto 15px;display:flex;justify-content:center;align-items:center;overflow:hidden;box-shadow:0 8px 15px rgba(230,46,45,.2)}
+.logo-box img{width:85%}
+h2{margin:0;font-size:26px;font-weight:800}
+.subtitle{color:#999;font-size:14px;margin:5px 0 20px}
+.input-group{margin-bottom:12px;background:#fff;border-radius:18px;padding:12px 18px;display:flex;align-items:center;box-shadow:0 5px 15px rgba(0,0,0,.04);border:1px solid #f2f2f2}
+.input-group input{border:none;outline:none;width:100%;font-size:16px;font-weight:600;background:transparent}
+.country-code{color:#ff1e1e;font-weight:900;font-size:20px;margin-right:10px}
+.eye-icon{width:22px;cursor:pointer;opacity:.5}
+.btnlogin{width:100%;background:linear-gradient(90deg,#ff1e1e,#ff4b2b);border:none;color:#fff;padding:16px;border-radius:35px;font-size:18px;font-weight:700;margin-top:10px;box-shadow:0 10px 25px rgba(255,30,30,.35);cursor:pointer}
+.switch-btn{margin-top:15px;color:#ff1e1e;font-weight:700;cursor:pointer}
+
+.header{position:fixed;top:0;width:100%;height:50px;background:#e61e2a;display:flex;align-items:center;justify-content:space-between;padding:0 15px;z-index:2000}
+.brand{color:#fff;font-size:20px;font-weight:700}
+.header-actions{display:flex;align-items:center;gap:8px}
+.wallet-pill{background:#fff;color:#e61e2a;padding:7px 11px;border-radius:8px;font-weight:800;font-size:13px}
+.logout-btn{background:#fff;border:none;color:#e61e2a;padding:7px 14px;border-radius:8px;font-weight:bold;cursor:pointer}
+.hero-top{background:#e61e2a;padding:60px 15px 10px;border-bottom-left-radius:30px;border-bottom-right-radius:30px}
+.banner-card{background:#fff;border-radius:15px;overflow:hidden}
+.banner-card img{width:100%;aspect-ratio:16/8;object-fit:cover}
+.plan-container{padding:15px 12px 100px}
+.plan-card{background:#fff;border-radius:18px;padding:12px 15px;margin-bottom:12px;position:relative;box-shadow:0 4px 12px rgba(0,0,0,.05);border:1px solid #f0f0f0}
+.days-badge{position:absolute;top:0;right:0;background:#e61e2a;color:#fff;padding:4px 12px;border-radius:0 18px 0 15px;font-size:10px;font-weight:700}
+.plan-layout{display:flex;align-items:flex-start;margin-top:8px}
+.plan-img{width:75px;height:75px;object-fit:cover;border-radius:10px}
+.plan-details{flex:1;margin-left:12px}
+.plan-name{font-size:16px;font-weight:700;color:#333;margin:0 0 8px}
+.stats-row{display:flex;justify-content:space-between}
+.stat-group span{display:block;font-size:10px;color:#999}
+.stat-group b{font-size:14px;color:#e61e2a}
+.price-section{font-size:12px;color:#555;margin-top:12px;display:flex;justify-content:space-between;align-items:center}
+.price-section b{color:#e61e2a;font-size:17px}
+.plan-actions{display:flex;align-items:center;gap:8px}
+.btn-invest{background:#e61e2a;color:#fff;border:none;padding:8px 25px;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer}
+.btn-info{width:32px;height:32px;border:none;border-radius:50%;background:#fff4f4;color:#e61e2a;font-size:16px;font-weight:900;cursor:pointer;border:1px solid #ffdada}
+
+.invest-count{position:absolute;top:8px;left:12px;background:#e61e2a;color:#fff;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700}
+.total-income{font-size:13px;color:#16a34a;font-weight:700;margin-top:6px}
+
+.bottom-nav{position:fixed;bottom:0;width:100%;height:60px;background:#fff;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #f0f0f0}
+.nav-link{display:flex;flex-direction:column;align-items:center;justify-content:center;text-decoration:none;color:#b2bec3;font-size:10px;font-weight:600}
+.nav-link.active{color:#e61e2a}
+.nav-link img{width:22px;height:22px;margin-bottom:3px}
+
+.custom-popup{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-30px);background:#fff;width:90%;max-width:340px;border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 15px 40px rgba(0,0,0,.15);z-index:99999;opacity:0;visibility:hidden;transition:.35s}
+.custom-popup.show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+.popup-icon{width:45px;height:45px;border-radius:50%;background:#16a34a;color:#fff;display:flex;justify-content:center;align-items:center;font-size:22px;font-weight:bold;flex-shrink:0}
+.popup-text{flex:1}
+.popup-title{font-size:15px;font-weight:700;color:#222;margin-bottom:3px}
+.popup-message{font-size:13px;color:#666;line-height:1.4}
+.popup-close{cursor:pointer;font-size:18px;color:#aaa;font-weight:bold}
+
+.classy-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;padding:20px;z-index:9999}
+.classy-modal.show{display:flex}
+.modal-content{width:100%;max-width:360px;background:#fff;border-radius:26px;padding:24px 20px;box-shadow:0 18px 50px rgba(0,0,0,.22);text-align:center}
+.modal-header-icon{width:58px;height:58px;background:#fff4f4;border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.modal-header-icon img{width:34px;height:34px}
+.modal-title{font-size:22px;font-weight:800;color:#202124;margin-bottom:5px}
+.modal-desc{font-size:13px;color:#8a8f98;margin-bottom:18px}
+.modal-info-box{background:#f8f9fb;border:1px solid #eef0f4;border-radius:18px;padding:12px 14px;text-align:left}
+.info-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eceff3}
+.info-row:last-child{border-bottom:none}
+.info-label{font-size:13px;color:#7c838e;font-weight:700}
+.info-value{font-size:14px;color:#e61e2a;font-weight:800}
+.modal-password{width:100%;border:none;outline:none;background:#f8f9fb;border:1px solid #eef0f4;border-radius:14px;padding:13px 14px;margin-top:12px;font-size:14px;font-weight:700}
+.product-info-text{text-align:left;color:#555;font-size:14px;line-height:1.5;background:#f8f9fb;border:1px solid #eef0f4;border-radius:16px;padding:14px;white-space:pre-wrap}
+.modal-footer{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.btn-modal-cancel,.btn-modal-confirm{border:none;border-radius:12px;padding:13px 10px;font-size:15px;font-weight:800;cursor:pointer}
+.btn-modal-cancel{background:#f0f1f4;color:#555}
+.btn-modal-confirm{background:#e61e2a;color:#fff}
+</style>
+</head>
+
+<body>
+
+<div class="custom-popup" id="popup">
+    <div class="popup-icon" id="popupIcon">✓</div>
+    <div class="popup-text">
+        <div class="popup-title" id="popupTitle">Success</div>
+        <div class="popup-message" id="popupMessage">Action completed</div>
+    </div>
+    <div class="popup-close" onclick="closePopup()">×</div>
+</div>
+
+<div class="classy-modal" id="classyModal">
+    <div class="modal-content">
+        <div class="modal-header-icon"><img src="https://img.icons8.com/material-rounded/48/e61e2a/coins.png"></div>
+        <h3 class="modal-title">Invest Now</h3>
+        <p class="modal-desc">Confirm your investment plan details</p>
+        <div class="modal-info-box">
+            <div class="info-row"><span class="info-label">Plan Name</span><span class="info-value" id="cModalPlanName"></span></div>
+            <div class="info-row"><span class="info-label">Amount</span><span class="info-value" id="cModalAmount"></span></div>
+            <div class="info-row"><span class="info-label">Daily Income</span><span class="info-value" id="cModalDaily"></span></div>
+            <div class="info-row"><span class="info-label">Cycle</span><span class="info-value"><span id="cModalCycle"></span> Days</span></div>
+        </div>
+        <input type="password" class="modal-password" id="cModalPassword" placeholder="Enter login password">
+        <div class="modal-footer">
+            <button class="btn-modal-cancel" onclick="closeClassyModal()">Back</button>
+            <button class="btn-modal-confirm" id="cModalConfirmBtn">Confirm Now</button>
+        </div>
+    </div>
+</div>
+
+<div class="classy-modal" id="infoModal">
+    <div class="modal-content">
+        <div class="modal-header-icon"><img src="https://img.icons8.com/material-rounded/48/e61e2a/info.png"></div>
+        <h3 class="modal-title" id="infoModalTitle">Product Info</h3>
+        <p class="modal-desc">Plan information added by admin</p>
+        <div class="product-info-text" id="infoModalText">No information available</div>
+        <div class="modal-footer" style="grid-template-columns:1fr">
+            <button class="btn-modal-confirm" onclick="closeInfoModal()">OK</button>
+        </div>
+    </div>
+</div>
+
+<div id="authPage">
+<div class="login-container">
+    <div class="logo-box"><img src="https://amul.codershiningstar.store/images/amul_logo.png"></div>
+    <h2 id="title">Register</h2>
+    <p class="subtitle" id="subtitle">Join us to start your journey</p>
+    <form id="mainForm">
+        <div class="input-group"><span class="country-code">+91</span><input type="number" id="phone" placeholder="Phone Number" required></div>
+        <div class="input-group"><input type="password" id="password" placeholder="Password" required><img src="https://cdn-icons-png.flaticon.com/512/709/709612.png" class="eye-icon" onclick="showPassword()"></div>
+        <div class="input-group" id="inviteBox"><input type="text" id="ref_by" placeholder="Invitation Code" value="fgfg"></div>
+        <button class="btnlogin" type="submit" id="submitBtn">REGISTER</button>
+    </form>
+    <div class="switch-btn" onclick="toggleMode()" id="switchText">Already have account? Login</div>
+</div>
+</div>
+
+<div id="dashboardPage" style="display:none">
+<header class="header">
+    <div class="brand">Amul</div>
+    <div class="header-actions">
+        <div class="wallet-pill">₹<span id="walletBalance">0</span></div>
+        <button class="logout-btn" onclick="logoutUser()">Logout</button>
+    </div>
+</header>
+<div class="hero-top"><div class="banner-card"><img src="https://amul.codershiningstar.store/public/ccc.jpg"></div></div>
+<div class="plan-container" id="planContainer"></div>
+
+<nav class="bottom-nav">
+    <a href="dashbord.html" class="nav-link active"><img src="https://img.icons8.com/material-rounded/48/e61e2a/home.png"><span>Home</span></a>
+    <a href="fund.html" class="nav-link"><img src="https://img.icons8.com/material-rounded/48/b2bec3/bank-safe.png"><span>Fund</span></a>
+    <a href="#" class="nav-link"><img src="https://img.icons8.com/material-rounded/48/b2bec3/conference-call.png"><span>Team</span></a>
+    <a href="upmine.html" class="nav-link"><img src="https://img.icons8.com/material-rounded/48/b2bec3/user-male-circle.png"><span>Mine</span></a>
+</nav>
+</div>
+
+<script>
+// ==================== CONFIG ====================
+const PROXY_URL = "https://fjseur.sawanenter7209.workers.dev";
+
+let isLogin = false;
+let popupTimer;
+let currentPhone = "";
+let selectedPlan = null;
+let allPlans = [];
+let userPurchases = {};
+
+// ==================== BASIC FUNCTIONS ====================
+function showPassword(){
+    let pass = document.getElementById("password");
+    pass.type = pass.type === "password" ? "text" : "password";
+}
+
+function toggleMode(){
+    isLogin = !isLogin;
+    if(isLogin){
+        document.getElementById("title").innerText = "Login";
+        document.getElementById("subtitle").innerText = "Login to continue";
+        document.getElementById("submitBtn").innerText = "LOGIN";
+        document.getElementById("inviteBox").style.display = "none";
+        document.getElementById("switchText").innerText = "Create new account";
+    }else{
+        document.getElementById("title").innerText = "Register";
+        document.getElementById("subtitle").innerText = "Join us to start your journey";
+        document.getElementById("submitBtn").innerText = "REGISTER";
+        document.getElementById("inviteBox").style.display = "flex";
+        document.getElementById("switchText").innerText = "Already have account? Login";
+    }
+}
+
+function openDashboard(){
+    document.getElementById("authPage").style.display = "none";
+    document.getElementById("dashboardPage").style.display = "block";
+}
+
+function logoutUser(){
+    localStorage.clear();
+    location.reload();
+}
+
+function showPopup(type,title,message){
+    clearTimeout(popupTimer);
+    const popup = document.getElementById("popup");
+    const icon = document.getElementById("popupIcon");
+    document.getElementById("popupTitle").innerText = title;
+    document.getElementById("popupMessage").innerText = message;
+
+    if(type === "success"){
+        icon.innerHTML = "✓"; icon.style.background = "#16a34a";
+    }else if(type === "error"){
+        icon.innerHTML = "!"; icon.style.background = "#dc2626";
+    }
+    popup.classList.add("show");
+    popupTimer = setTimeout(()=> popup.classList.remove("show"),2800);
+}
+
+function closePopup(){
+    document.getElementById("popup").classList.remove("show");
+}
+
+// ==================== PROXY ====================
+async function proxyRequest(endpoint, method = "GET", body = null) {
+    try {
+        const options = { method, headers: { "Content-Type": "application/json" }};
+        if (body) options.body = JSON.stringify(body);
+        const res = await fetch(PROXY_URL + endpoint, options);
+        if (!res.ok) throw new Error("Server Error");
+        const text = await res.text();
+        return text ? JSON.parse(text) : null;
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+}
+
+async function getData(path) { return await proxyRequest("/db/" + path); }
+async function setData(path, data) { return await proxyRequest("/db/" + path, "PUT", data); }
+async function pushData(path, data) { return await proxyRequest("/db/" + path, "POST", data); }
+
+function listenData(path, callback) {
+    setInterval(async () => {
+        try {
+            const data = await getData(path);
+            callback({ val: () => data });
+        } catch(e) {}
+    }, 2000);
+}
+
+// ==================== LOGIC ====================
+async function findUserByPhone(phone){
+    try {
+        const users = await getData("users");
+        if(!users) return null;
+        for(let key in users){
+            if(users[key].phone === phone){
+                return {key, data: users[key]};
+            }
+        }
+    } catch(e){}
+    return null;
+}
+
+function listenWalletBalance(){
+    if(!currentPhone) return;
+    listenData("demoWallet/" + currentPhone, (snap) => {
+        document.getElementById("walletBalance").innerText = Number(snap.val() || 0).toFixed(2);
+    });
+}
+
+function listenPurchases(){
+    if(!currentPhone) return;
+    listenData("purchases", (snap) => {
+        userPurchases = {};
+        const data = snap.val() || {};
+        Object.keys(data).forEach(k => {
+            const p = data[k];
+            if(p.phone === currentPhone && p.sold !== true){
+                const pk = p.planKey || p.planName;
+                if(!userPurchases[pk]) userPurchases[pk] = [];
+                userPurchases[pk].push({key:k, ...p});
+            }
+        });
+        renderPlans();
+    });
+}
+
+function loadPlans(){
+    listenData("plans", (snap) => {
+        allPlans = [];
+        const data = snap.val() || {};
+        Object.keys(data).forEach(k => allPlans.push({key:k, ...data[k]}));
+        renderPlans();
+    });
+}
+
+function getCycleStatus(plan, purchase){
+    const totalDays = Number(plan.days || 0);
+    const dailyIncome = Number(plan.dailyIncome || 0);
+    const startTime = Number(purchase.startTime || Date.now());
+    const passedDays = Math.floor((Date.now() - startTime) / 86400000) + 1;
+    const runningDay = Math.min(totalDays, Math.max(1, passedDays));
+    return { runningDay, totalDays, earnedIncome: runningDay * dailyIncome };
+}
+
+function renderPlans(){
+    const container = document.getElementById("planContainer");
+    container.innerHTML = "";
+
+    if(allPlans.length === 0){
+        container.innerHTML = "<p style='text-align:center;color:#777;padding:20px'>No plans available</p>";
+        return;
+    }
+
+    allPlans.forEach((plan)=>{
+        const purchases = userPurchases[plan.key] || [];
+        const count = purchases.length;
+        let totalDaily = 0, totalEarned = 0;
+
+        purchases.forEach(p => {
+            const cycle = getCycleStatus(plan, p);
+            totalDaily += Number(plan.dailyIncome);
+            totalEarned += cycle.earnedIncome;
+        });
+
+        const totalReturn = Number(plan.dailyIncome) * Number(plan.days) * count;
+
+        container.innerHTML += `
+        <div class="plan-card">
+            ${count > 0 ? `<div class="invest-count">×${count} Invested</div>` : ""}
+            <div class="days-badge">Days : ${plan.days}</div>
+            <div class="plan-layout">
+                <img src="${plan.image}" class="plan-img">
+                <div class="plan-details">
+                    <h4 class="plan-name">${plan.name}</h4>
+                    <div class="stats-row">
+                        <div class="stat-group"><span>Daily Income</span><b>₹${Number(plan.dailyIncome).toFixed(2)}</b></div>
+                        <div class="stat-group"><span>Total Return</span><b>₹${totalReturn.toFixed(2)}</b></div>
+                    </div>
+                    ${count > 0 ? `<div class="total-income">Total Daily: ₹${totalDaily.toFixed(2)} | Earned: ₹${totalEarned.toFixed(2)}</div>` : ""}
+                    <div class="price-section">
+                        <span>Price : <b>₹${Number(plan.price).toFixed(2)}</b></span>
+                        <div class="plan-actions">
+                            <button class="btn-invest" onclick="buyPlanByKey('${plan.key}')">
+                                ${count > 0 ? 'Invest Again' : 'Invest Now'}
+                            </button>
+                            <button class="btn-info" onclick="openPlanInfo('${plan.key}')">i</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    });
+}
+
+window.openPlanInfo = function(planKey){
+    const plan = allPlans.find(p => p.key === planKey);
+    if(!plan) return;
+    document.getElementById("infoModalTitle").innerText = plan.name;
+    document.getElementById("infoModalText").innerText = plan.info || plan.description || "No information available";
+    document.getElementById("infoModal").classList.add("show");
+};
+
+window.closeInfoModal = function(){
+    document.getElementById("infoModal").classList.remove("show");
+};
+
+window.buyPlanByKey = function(planKey){
+    const plan = allPlans.find(p => p.key === planKey);
+    if(!plan) return;
+    selectedPlan = plan;
+
+    document.getElementById("cModalPlanName").innerText = plan.name;
+    document.getElementById("cModalAmount").innerText = "₹" + Number(plan.price).toFixed(2);
+    document.getElementById("cModalDaily").innerText = "₹" + Number(plan.dailyIncome).toFixed(2);
+    document.getElementById("cModalCycle").innerText = plan.days;
+    document.getElementById("cModalPassword").value = "";
+    document.getElementById("classyModal").classList.add("show");
+};
+
+window.closeClassyModal = function(){
+    document.getElementById("classyModal").classList.remove("show");
+};
+
+// Investment Confirm
+document.getElementById("cModalConfirmBtn").addEventListener("click", async function(){
+    if(!selectedPlan || !currentPhone) return showPopup("error","Error","Something went wrong");
+
+    const pass = document.getElementById("cModalPassword").value.trim();
+    if(!pass) return showPopup("error","Password Required","Enter your password");
+
+    const btn = this;
+    btn.disabled = true;
+    btn.innerText = "Processing...";
+
+    try {
+        const userData = await findUserByPhone(currentPhone);
+        if(!userData || userData.data.password !== pass){
+            showPopup("error","Wrong Password","Password does not match");
+            return;
+        }
+
+        const walletPath = "demoWallet/" + currentPhone;
+        let balance = Number(await getData(walletPath) || 0);
+
+        if(balance < selectedPlan.price){
+            showPopup("error","Low Balance","Not enough balance in wallet");
+            return;
+        }
+
+        await setData(walletPath, balance - selectedPlan.price);
+
+        await pushData("purchases", {
+            phone: currentPhone,
+            planKey: selectedPlan.key,
+            planName: selectedPlan.name,
+            amount: selectedPlan.price,
+            dailyIncome: selectedPlan.dailyIncome,
+            days: selectedPlan.days,
+            startTime: Date.now(),
+            sold: false
+        });
+
+        showPopup("success","Success", `${selectedPlan.name} purchased successfully!`);
+        closeClassyModal();
+
+        setTimeout(() => listenWalletBalance(), 600);
+
+    } catch(err){
+        console.error(err);
+        showPopup("error","Failed","Please try again");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "Confirm Now";
+    }
+});
+
+// Auto Login
+async function autoLogin(){
+    const savedPhone = localStorage.getItem("phone");
+    if(savedPhone){
+        currentPhone = savedPhone;
+        const user = await findUserByPhone(savedPhone);
+        if(user){
+            openDashboard();
+            listenWalletBalance();
+            listenPurchases();
+            loadPlans();
+        }
+    }
+}
+
+autoLogin();
+
+document.getElementById("mainForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    let phone = document.getElementById("phone").value.trim();
+    let password = document.getElementById("password").value.trim();
+    let ref_by = document.getElementById("ref_by").value.trim();
+
+    if(!isLogin){
+        if(await findUserByPhone(phone)){
+            showPopup("error","Account Exists","This phone number is already registered");
+            return;
+        }
+        await pushData("users",{phone, password, ref_by, createdAt: new Date().toLocaleString()});
+        await setData("demoWallet/" + phone, 0);
+        showPopup("success","Registration Complete","Your account created successfully");
+        toggleMode();
+    }else{
+        const user = await findUserByPhone(phone);
+        if(user && user.data.password === password){
+            currentPhone = phone;
+            localStorage.setItem("phone", phone);
+            showPopup("success","Login Successful","Welcome back");
+            setTimeout(()=>{ 
+                openDashboard(); 
+                listenWalletBalance(); 
+                listenPurchases(); 
+                loadPlans(); 
+            },800);
+        }else{
+            showPopup("error","Login Failed","Invalid phone or password");
+        }
+    }
+});
+</script>
+</body>
+</html>
